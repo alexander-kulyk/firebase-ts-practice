@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/firebase-ts-practice/static/css/main.7acaea2f.css",
+    "main.js": "/firebase-ts-practice/static/js/main.c1d52d32.js",
+    "index.html": "/firebase-ts-practice/index.html",
+    "main.7acaea2f.css.map": "/firebase-ts-practice/static/css/main.7acaea2f.css.map",
+    "main.c1d52d32.js.map": "/firebase-ts-practice/static/js/main.c1d52d32.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7acaea2f.css",
+    "static/js/main.c1d52d32.js"
+  ]
+}
