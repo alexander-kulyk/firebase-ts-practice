@@ -7,6 +7,7 @@ export const Layout = () => {
       <header>
         <div className={css.wrapperLink}>
           <Link to="/">Home</Link>
+          <Link to="user">User Profile</Link>
           <Link to="login">login</Link>
           <Link to="registration">registration</Link>
         </div>

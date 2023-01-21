@@ -1,12 +1,16 @@
 //import { ref, uploadBytes, listAll, getDownloadURL } from '@firebase/storage';
 import { Login } from 'pages/Login/Login';
 import { Registration } from 'pages/Registration/Registration';
+import { UserProfile } from 'pages/UserProfile/UserProfile';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 //import { useRef } from 'react';
 //import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 //import { v4 } from 'uuid';
 //import { storageFB } from '../firebase';
-import '../service/api';
+import '../redux/auth/api';
+import { refreshUser } from '../redux/auth/api';
 import { Layout } from './Layout/Layout';
 //const img1 = '(162).JPEG';
 
@@ -14,6 +18,12 @@ export const App = () => {
   //const [imageUload, setImegeUpload] = useState(null);
   //const [imageList, setImageList] = useState([]);
   //const [urlImg, setUrlImg] = useState('');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
 
   //const imagesListRef = ref(storageFB);
 
@@ -45,6 +55,7 @@ export const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<div>Home</div>} />
+        <Route path="user" element={<UserProfile />} />
         <Route path="login" element={<Login />} />
         <Route path="registration" element={<Registration />} />
       </Route>

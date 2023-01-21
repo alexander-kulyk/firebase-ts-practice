@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
-import { userIsLogin, userLogout } from 'service/api';
+import { userIsLogin, userLogout } from 'redux/auth/api';
 import css from './login.module.css';
 
 export const Login = () => {

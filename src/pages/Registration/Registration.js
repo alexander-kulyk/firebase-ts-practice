@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import { registerUser } from 'service/api';
+import { registerUser } from 'redux/auth/api';
 import css from '../Login/login.module.css';
 import '../../firebase';
 import { useDispatch } from 'react-redux';

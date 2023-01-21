@@ -1,17 +1,16 @@
 //import axios from 'axios';
-import '../firebase';
+import '../../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from 'firebase/auth';
+import { child, get, getDatabase, ref, set } from 'firebase/database';
+import { getUidFromLocalStor, setUidInLocalStor } from 'hooks/useLocalStorage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { child, get, getDatabase, ref } from 'firebase/database';
 
 //const dbRef = ref(getDatabase());
-
-const userId = 'jACLaH90gSMVZ6d4BOzFkExuQvu2';
 
 // //axios.defaults.baseURL = 'https://phonebook-d4948-default-rtdb.firebaseio.com';
 
@@ -58,6 +57,14 @@ export const registerUser = createAsyncThunk(
       const emailU = auth.currentUser.email;
       const uid = auth.currentUser.uid;
       const token = auth.currentUser.accessToken;
+
+      await set(ref(getDatabase(), 'users/' + uid), {
+        name,
+        email,
+        uid,
+      });
+
+      setUidInLocalStor(uid);
 
       return { name: nameU, email: emailU, uid, token };
     } catch (e) {
@@ -110,28 +117,56 @@ export const userLogout = createAsyncThunk(
     try {
       await signOut(auth);
       console.log('auth.currentUser', auth.currentUser);
+      const uid = null;
+      setUidInLocalStor(uid);
     } catch (error) {}
   }
 );
 
-const refresh = async () => {
-  const dbRef = ref(getDatabase());
+export const refreshUser = createAsyncThunk(
+  'auth/refresh',
+  async (_, thunkAPI) => {
+    const dbRef = ref(getDatabase());
+    const uid = getUidFromLocalStor();
 
-  await get(child(dbRef, `users/${userId}`))
-    .then(snapshot => {
-      console.log('snapshot', snapshot.val());
-      if (snapshot.exists()) {
-        console.log('snapshot.exists()', snapshot.exists());
-      } else {
-        console.log('No data available');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-};
+    if (uid === null) return thunkAPI.rejectWithValue('Unable to fetch user');
 
-refresh();
+    try {
+      const resp = await get(child(dbRef, `users/${uid}`)).then(snapshot =>
+        snapshot.val()
+      );
+      console.log('resp', resp);
+
+      return resp;
+    } catch (e) {
+      console.log('e.message', e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+refreshUser();
+
+// const refresh = async () => {
+//   const dbRef = ref(getDatabase());
+
+//   const resp = await get(child(dbRef, `users/${userId}`)).then(snapshot =>
+//     snapshot.val()
+//   );
+//   console.log('resp', resp);
+// .then(snapshot => {
+//   console.log('snapshot', snapshot.val());
+//   if (snapshot.exists()) {
+//     console.log('snapshot.exists()', snapshot.exists());
+//   } else {
+//     console.log('No data available');
+//   }
+// })
+// .catch(error => {
+//   console.error(error);
+// });
+// };
+
+// refresh();
 
 // const ACCESS_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImQwNTU5YzU5MDgzZDc3YWI2NDUxOThiNTIxZmM4ZmVmZmVlZmJkNjIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoibXVtdSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9waG9uZWJvb2stZDQ5NDgiLCJhdWQiOiJwaG9uZWJvb2stZDQ5NDgiLCJhdXRoX3RpbWUiOjE2NzQyNDI4MDEsInVzZXJfaWQiOiJHMEZOYk9vQUpmVlFBeG1Nam9VZW9XeG0yYnoxIiwic3ViIjoiRzBGTmJPb0FKZlZRQXhtTWpvVWVvV3htMmJ6MSIsImlhdCI6MTY3NDI0MjgwMSwiZXhwIjoxNjc0MjQ2NDAxLCJlbWFpbCI6Im11bXVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIm11bXVAZ21haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.ANqUQ_63D5o8t7mkrZ-BuvpPuAOhbt1EJp2iPT_10n7HT1hpNN58ZWzuyMGeQNn-Ys7ViMAlKNJFXRj3vYfp6YlQchQ0B20W3Gjv1-Od2yVFxx-j3weti0RgiyaMgDi5hCc4BTElA5hQzVkuZCP_oyQGnllqKpmcoti_2qiNeIop0iYYQ7rGourL8_vaipqRqH6510ce56JgMOf5g_bE297o0XOxkiitn5SieVdnINKxysoE1pFKph4bTNZvZW2LN_H3DSGAhp08pdDHuAXBYGKSQj4GuE-yybSP7qWelHcqqShaIjF1k0WxiyIlmLoBpC1NYwWa7pt-cQTM_lt2ww"
 
