@@ -7,7 +7,10 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { child, get, getDatabase, ref, set } from 'firebase/database';
-import { getUidFromLocalStor, setUidInLocalStor } from 'hooks/useLocalStorage';
+import {
+  getUidFromLocalStor,
+  setUidInLocalStor,
+} from 'hooks/useLocalStorage.ts';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 //const dbRef = ref(getDatabase());
@@ -62,6 +65,8 @@ export const registerUser = createAsyncThunk(
         name,
         email,
         uid,
+        todo: '[]',
+        numbers: '[]',
       });
 
       setUidInLocalStor(uid);
@@ -95,6 +100,7 @@ export const userIsLogin = createAsyncThunk(
       //   console.log('user', user);
       //   // ...
       // });
+      setUidInLocalStor(uid);
 
       return { name, email: emailU, uid, token };
     } catch (e) {
@@ -135,8 +141,6 @@ export const refreshUser = createAsyncThunk(
       const resp = await get(child(dbRef, `users/${uid}`)).then(snapshot =>
         snapshot.val()
       );
-      console.log('resp', resp);
-
       return resp;
     } catch (e) {
       console.log('e.message', e.message);
