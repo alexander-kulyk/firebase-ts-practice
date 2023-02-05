@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import { todo } from 'type/type';
-import { ItemsTodo } from '../ItemsTodo/ItemsTodo.tsx';
+import { ItemTodo } from '../ItemsTodo/ItemsTodo.tsx';
 
 interface ItemsProps {
   handelDeleteTodo: (id: string) => void;
-  onChangeCheckbox: (e: React.SyntheticEvent, id: string) => todo;
+  onChangeCheckbox: (e: SyntheticEvent, id: string) => todo;
   todos: todo;
 }
 
-export const ListTodo: React.FC<ItemsProps> = ({
+export const ListTodo: FC<ItemsProps> = ({
   handelDeleteTodo,
   onChangeCheckbox,
   todos,
@@ -16,11 +16,11 @@ export const ListTodo: React.FC<ItemsProps> = ({
   return (
     <ul>
       {todos.map(todo => (
-        <ItemsTodo
+        <ItemTodo
           key={todo.id}
           handelDeleteTodo={handelDeleteTodo}
           onChangeCheckbox={onChangeCheckbox}
-          todos={todo}
+          todo={todo}
         />
       ))}
     </ul>

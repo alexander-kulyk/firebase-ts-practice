@@ -1,7 +1,5 @@
-export type todo = [
-  {
-    id: string;
-    text: string;
-    complited: boolean;
-  }
-];
+export type Todo = {
+  id: string;
+  text: string;
+  complited: boolean;
+};

@@ -89,9 +89,7 @@ export const userIsLogin = createAsyncThunk(
         console.log('e.message', e.message)
       );
       console.log('auth.currentUser', auth.currentUser);
-      const name = auth.currentUser.displayName;
-      const emailU = auth.currentUser.email;
-      const uid = auth.currentUser.uid;
+      const { displayName: name, email: emailU, uid } = auth.currentUser;
       const token = auth.currentUser.accessToken;
 
       // signInWithCustomToken(auth, token).then(userCredential => {

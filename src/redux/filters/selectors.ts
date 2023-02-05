@@ -24,9 +24,8 @@ export const selectTodosByFilter = createSelector(
       return allTodos;
     }
 
-    if (activeFilter === Filter.completed) {
-      return allTodos.filter(todo => todo.complited);
-    }
-    return allTodos.filter(todo => !todo.complited);
+    return allTodos.filter(todo =>
+      activeFilter === Filter.completed ? todo.complited : !todo.complited
+    );
   }
 );

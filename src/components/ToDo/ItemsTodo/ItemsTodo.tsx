@@ -1,25 +1,19 @@
-import React from 'react';
+import React, { FC } from 'react';
 import css from 'components/ToDo/ToDo.module.css';
-import { todo } from 'type/type';
+import { Todo } from 'type/type';
 
-type ItemTodo = {
-  id: string;
-  text: string;
-  complited: boolean;
-};
-
-interface ItemsProps {
+interface ItemProps {
   handelDeleteTodo: (id: string) => void;
-  onChangeCheckbox: (e: React.SyntheticEvent, id: string) => todo;
-  todos: ItemTodo;
+  onChangeCheckbox: (e: React.SyntheticEvent, id: string) => Todo;
+  todo: Todo;
 }
 
-export const ItemsTodo: React.FC<ItemsProps> = ({
+export const ItemTodo: FC<ItemProps> = ({
   handelDeleteTodo,
   onChangeCheckbox,
-  todos,
+  todo,
 }) => {
-  const { id, text, complited } = todos;
+  const { id, text, complited } = todo;
   return (
     <li>
       <input
